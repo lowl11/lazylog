@@ -1,4 +1,4 @@
-package main
+package lazylog
 
 import (
 	"github.com/rs/zerolog"
