@@ -1,7 +1,7 @@
 package logapi
 
 import (
-	"lazylog/loggers/console_logger"
+	"github.com/Lowl11/lazylog/loggers/console_logger"
 	"os"
 )
 
