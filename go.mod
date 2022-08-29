@@ -1,3 +1,3 @@
-module github.com/Lowl11/lazylog
+module github.com/lowl11/lazylog
 
 go 1.15
