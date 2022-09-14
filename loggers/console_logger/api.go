@@ -1,6 +1,6 @@
 package console_logger
 
-import "github.com/Lowl11/lazylog/console_tools"
+import "github.com/lowl11/lazylog/console_tools"
 
 const (
 	debugLevel = "[DEBUG] "
