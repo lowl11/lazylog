@@ -1,6 +1,4 @@
-package console_logger
-
-import "github.com/lowl11/lazylog/console_tools"
+package file_logger
 
 const (
 	debugLevel = "[DEBUG] "
@@ -11,26 +9,41 @@ const (
 )
 
 func (logger *Logger) Debug(message string) {
+	logger.mutex.Lock()
+	defer logger.mutex.Unlock()
+	logger.updateFile()
 	logger.writer.SetPrefix(debugLevel)
-	logger.writer.Println(console_tools.Debug(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Info(message string) {
+	logger.mutex.Lock()
+	defer logger.mutex.Unlock()
+	logger.updateFile()
 	logger.writer.SetPrefix(infoLevel)
-	logger.writer.Println(console_tools.Info(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Warn(message string) {
+	logger.mutex.Lock()
+	defer logger.mutex.Unlock()
+	logger.updateFile()
 	logger.writer.SetPrefix(warnLevel)
-	logger.writer.Println(console_tools.Warn(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Error(err error, message string) {
+	logger.mutex.Lock()
+	defer logger.mutex.Unlock()
+	logger.updateFile()
 	logger.writer.SetPrefix(errorLevel)
-	logger.writer.Println(console_tools.Error(err.Error() + " | " + message))
+	logger.writer.Println(err.Error() + " | " + message)
 }
 
 func (logger *Logger) Fatal(err error, message string) {
+	logger.mutex.Lock()
+	defer logger.mutex.Unlock()
+	logger.updateFile()
 	logger.writer.SetPrefix(fatalLevel)
-	logger.writer.Println(console_tools.Fatal(err.Error() + " | " + message))
+	logger.writer.Println(err.Error() + " | " + message)
 }

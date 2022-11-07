@@ -1,7 +1,8 @@
 package logapi
 
 import (
-	"github.com/Lowl11/lazylog/loggers/console_logger"
+	"github.com/lowl11/lazylog/loggers/console_logger"
+	"github.com/lowl11/lazylog/loggers/file_logger"
 	"os"
 )
 
@@ -9,30 +10,16 @@ type Logger struct {
 	loggers []ILogger
 }
 
-func New(loggerTypes ...string) ILogger {
-	loggers := make([]ILogger, 0, 2)
+func (logger *Logger) File(fileBase string) *Logger {
+	logger.loggers = append(logger.loggers, file_logger.Create(fileBase))
+	return logger
+}
 
-	var isConsole, isFile bool
-	for _, loggerType := range loggerTypes {
-		switch loggerType {
-		case Console:
-			isConsole = true
-			break
-		case File:
-			isFile = true
-			break
-		}
-	}
-
-	if isConsole {
-		loggers = append(loggers, console_logger.Create(isFile))
-	}
-
-	if len(loggerTypes) == 0 && len(loggers) == 0 {
-		loggers = append(loggers, console_logger.Create(isFile))
-	}
+func New() *Logger {
 	return &Logger{
-		loggers: loggers,
+		loggers: []ILogger{
+			console_logger.Create(),
+		},
 	}
 }
 
