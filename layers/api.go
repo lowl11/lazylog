@@ -3,14 +3,15 @@ package layers
 // tools
 const (
 	Cache    = "Cache"
-	ELASTIC  = "Elastic Search"
+	Elastic  = "Elastic Search"
 	Database = "Database"
 	File     = "File"
 	Mongo    = "Mongo"
+	Kafka    = "Kafka"
 	Rest     = "REST"
 	Redis    = "Redis"
 	Rabbit   = "RabbitMQ"
-	Kafka    = "Kafka"
+	Server   = "Server"
 )
 
 // business

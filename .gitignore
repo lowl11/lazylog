@@ -4,3 +4,4 @@
 *.log
 main.go
 custom.go
+logs

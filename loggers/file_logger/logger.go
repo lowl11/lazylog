@@ -6,16 +6,19 @@ import (
 )
 
 type Logger struct {
-	writer   *log.Logger
+	writer *log.Logger
+
 	fileName string
 	fileBase string
+	filePath string
 
 	mutex sync.Mutex
 }
 
-func Create(fileBase string) *Logger {
+func Create(fileBase, filePath string) *Logger {
 	logger := &Logger{
 		fileBase: fileBase,
+		filePath: filePath,
 
 		mutex: sync.Mutex{},
 	}

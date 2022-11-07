@@ -2,6 +2,7 @@ package file_logger
 
 import (
 	"fmt"
+	"github.com/lowl11/lazyfile/folderapi"
 	"log"
 	"os"
 	"time"
@@ -12,8 +13,20 @@ const (
 )
 
 func (logger *Logger) createFile() *os.File {
+	// build log file name
 	fileName := fmt.Sprintf(fileNamePattern, logger.fileBase, time.Now().Format("02-01-2006"))
 
+	// destination folder
+	if logger.filePath != "" {
+		fileName = logger.filePath + "/" + fileName
+		if folderapi.NotExists(logger.filePath) {
+			if err := os.Mkdir(logger.filePath, os.ModePerm); err != nil {
+				log.Println("Creating logs folder error")
+			}
+		}
+	}
+
+	// create file
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return nil

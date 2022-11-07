@@ -10,8 +10,13 @@ type Logger struct {
 	loggers []ILogger
 }
 
-func (logger *Logger) File(fileBase string) *Logger {
-	logger.loggers = append(logger.loggers, file_logger.Create(fileBase))
+func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
+	var singleFilePath string
+	if len(filePath) > 0 {
+		singleFilePath = filePath[0]
+	}
+
+	logger.loggers = append(logger.loggers, file_logger.Create(fileBase, singleFilePath))
 	return logger
 }
 
