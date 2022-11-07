@@ -28,33 +28,33 @@ func New() *Logger {
 	}
 }
 
-func (logger *Logger) Debug(message string) {
+func (logger *Logger) Debug(message string, layers ...string) {
 	for _, logger := range logger.loggers {
-		logger.Debug(message)
+		logger.Debug(message, layers...)
 	}
 }
 
-func (logger *Logger) Info(message string) {
+func (logger *Logger) Info(message string, layers ...string) {
 	for _, logger := range logger.loggers {
-		logger.Info(message)
+		logger.Info(message, layers...)
 	}
 }
 
-func (logger *Logger) Warn(message string) {
+func (logger *Logger) Warn(message string, layers ...string) {
 	for _, logger := range logger.loggers {
-		logger.Warn(message)
+		logger.Warn(message, layers...)
 	}
 }
 
-func (logger *Logger) Error(err error, message string) {
+func (logger *Logger) Error(err error, message string, layers ...string) {
 	for _, logger := range logger.loggers {
-		logger.Error(err, message)
+		logger.Error(err, message, layers...)
 	}
 }
 
-func (logger *Logger) Fatal(err error, message string) {
+func (logger *Logger) Fatal(err error, message string, layers ...string) {
 	for _, logger := range logger.loggers {
-		logger.Fatal(err, message)
+		logger.Fatal(err, message, layers...)
 	}
 	os.Exit(1)
 }
