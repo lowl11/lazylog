@@ -3,3 +3,4 @@
 *.exe
 *.log
 main.go
+custom.go

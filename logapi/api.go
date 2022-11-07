@@ -15,6 +15,11 @@ func (logger *Logger) File(fileBase string) *Logger {
 	return logger
 }
 
+func (logger *Logger) Custom(customLogger ILogger) *Logger {
+	logger.loggers = append(logger.loggers, customLogger)
+	return logger
+}
+
 func New() *Logger {
 	return &Logger{
 		loggers: []ILogger{
