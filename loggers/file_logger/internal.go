@@ -19,7 +19,7 @@ func (logger *Logger) createFile() *os.File {
 	// destination folder
 	if logger.filePath != "" {
 		fileName = logger.filePath + "/" + fileName
-		if folderapi.NotExists(logger.filePath) {
+		if !folderapi.Exist(logger.filePath) {
 			if err := os.Mkdir(logger.filePath, os.ModePerm); err != nil {
 				log.Println("Creating logs folder error")
 			}
