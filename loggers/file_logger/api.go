@@ -10,42 +10,42 @@ const (
 	fatalLevel = "[FATAL] "
 )
 
-func (logger *Logger) Debug(message string, layers ...string) {
+func (logger *Logger) Debug(args ...string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(debugLevel)
-	logger.writer.Println(message_tools.Build(message, layers...))
+	logger.writer.Println(message_tools.Build(args...))
 }
 
-func (logger *Logger) Info(message string, layers ...string) {
+func (logger *Logger) Info(args ...string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(infoLevel)
-	logger.writer.Println(message_tools.Build(message, layers...))
+	logger.writer.Println(message_tools.Build(args...))
 }
 
-func (logger *Logger) Warn(message string, layers ...string) {
+func (logger *Logger) Warn(args ...string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(warnLevel)
-	logger.writer.Println(message_tools.Build(message, layers...))
+	logger.writer.Println(message_tools.Build(args...))
 }
 
-func (logger *Logger) Error(err error, message string, layers ...string) {
+func (logger *Logger) Error(err error, args ...string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(errorLevel)
-	logger.writer.Println(message_tools.Build(err.Error()+" | "+message, layers...))
+	logger.writer.Println(err.Error() + " | " + message_tools.Build(args...))
 }
 
-func (logger *Logger) Fatal(err error, message string, layers ...string) {
+func (logger *Logger) Fatal(err error, args ...string) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(fatalLevel)
-	logger.writer.Println(message_tools.Build(err.Error()+" | "+message, layers...))
+	logger.writer.Println(err.Error() + " | " + message_tools.Build(args...))
 }

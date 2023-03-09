@@ -13,27 +13,27 @@ const (
 	fatalLevel = "[FATAL] "
 )
 
-func (logger *Logger) Debug(message string, layers ...string) {
+func (logger *Logger) Debug(args ...string) {
 	logger.writer.SetPrefix(debugLevel)
-	logger.writer.Println(message_tools.Build(console_tools.Debug(message), layers...))
+	logger.writer.Println(console_tools.Debug(message_tools.Build(args...)))
 }
 
-func (logger *Logger) Info(message string, layers ...string) {
+func (logger *Logger) Info(args ...string) {
 	logger.writer.SetPrefix(infoLevel)
-	logger.writer.Println(message_tools.Build(console_tools.Info(message), layers...))
+	logger.writer.Println(console_tools.Info(message_tools.Build(args...)))
 }
 
-func (logger *Logger) Warn(message string, layers ...string) {
+func (logger *Logger) Warn(args ...string) {
 	logger.writer.SetPrefix(warnLevel)
-	logger.writer.Println(message_tools.Build(console_tools.Warn(message), layers...))
+	logger.writer.Println(console_tools.Warn(message_tools.Build(args...)))
 }
 
-func (logger *Logger) Error(err error, message string, layers ...string) {
+func (logger *Logger) Error(err error, args ...string) {
 	logger.writer.SetPrefix(errorLevel)
-	logger.writer.Println(message_tools.Build(console_tools.Error(err.Error()+" | "+message), layers...))
+	logger.writer.Println(console_tools.Error(err.Error() + " | " + message_tools.Build(args...)))
 }
 
-func (logger *Logger) Fatal(err error, message string, layers ...string) {
+func (logger *Logger) Fatal(err error, args ...string) {
 	logger.writer.SetPrefix(fatalLevel)
-	logger.writer.Println(message_tools.Build(console_tools.Fatal(err.Error()+" | "+message), layers...))
+	logger.writer.Println(console_tools.Fatal(err.Error() + " | " + message_tools.Build(args...)))
 }
