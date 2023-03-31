@@ -11,40 +11,30 @@ const (
 )
 
 func (logger *Logger) Debug(args ...string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(debugLevel)
 	logger.writer.Println(message_tools.Build(args...))
 }
 
 func (logger *Logger) Info(args ...string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(infoLevel)
 	logger.writer.Println(message_tools.Build(args...))
 }
 
 func (logger *Logger) Warn(args ...string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(warnLevel)
 	logger.writer.Println(message_tools.Build(args...))
 }
 
 func (logger *Logger) Error(err error, args ...string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(errorLevel)
 	logger.writer.Println(err.Error() + " | " + message_tools.Build(args...))
 }
 
 func (logger *Logger) Fatal(err error, args ...string) {
-	logger.mutex.Lock()
-	defer logger.mutex.Unlock()
 	logger.updateFile()
 	logger.writer.SetPrefix(fatalLevel)
 	logger.writer.Println(err.Error() + " | " + message_tools.Build(args...))
