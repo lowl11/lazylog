@@ -1,9 +1,9 @@
 package logapi
 
 type ILogger interface {
-	Debug(args ...string)
-	Info(args ...string)
-	Warn(args ...string)
-	Error(err error, args ...string)
-	Fatal(err error, args ...string)
+	Debug(value string, args ...any)
+	Info(value string, args ...any)
+	Warn(value string, args ...any)
+	Error(err error, value string, args ...any)
+	Fatal(err error, value string, args ...any)
 }
