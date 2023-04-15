@@ -9,6 +9,10 @@ import (
 )
 
 func toString(anyValue any) string {
+	if _, ok := anyValue.(error); ok {
+		return anyValue.(error).Error()
+	}
+
 	value := reflect.ValueOf(anyValue)
 
 	switch value.Kind() {

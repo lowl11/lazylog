@@ -25,7 +25,12 @@ func BuildError(err error, args ...any) string {
 		stringArgs = append(stringArgs, toString(arg))
 	}
 
-	return err.Error() + " | " + strings.Join(stringArgs, " ")
+	var errorMessage string
+	if err != nil {
+		errorMessage = err.Error() + " | "
+	}
+
+	return errorMessage + strings.Join(stringArgs, " ")
 }
 
 func BuildPrefix(level string) string {
@@ -52,11 +57,16 @@ func Json(level string, args ...any) string {
 }
 
 func JsonError(err error, level string, args ...any) string {
+	var errorMessage string
+	if err != nil {
+		errorMessage = err.Error()
+	}
+
 	logMessage := &LogMessage{
 		Message: Build(args...),
 		Level:   level,
 		Time:    getTime(),
-		Error:   err.Error(),
+		Error:   errorMessage,
 	}
 
 	logMessageInBytes, err := json.Marshal(logMessage)
