@@ -36,48 +36,48 @@ func New() *Logger {
 	}
 }
 
-func (logger *Logger) Debug(value string, args ...any) {
+func (logger *Logger) Debug(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
 	for _, logger := range logger.loggers {
-		logger.Debug(value, args...)
+		logger.Debug(args...)
 	}
 }
 
-func (logger *Logger) Info(value string, args ...any) {
+func (logger *Logger) Info(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
 	for _, logger := range logger.loggers {
-		logger.Info(value, args...)
+		logger.Info(args...)
 	}
 }
 
-func (logger *Logger) Warn(value string, args ...any) {
+func (logger *Logger) Warn(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
 	for _, logger := range logger.loggers {
-		logger.Warn(value, args...)
+		logger.Warn(args...)
 	}
 }
 
-func (logger *Logger) Error(err error, value string, args ...any) {
+func (logger *Logger) Error(err error, args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
 	for _, logger := range logger.loggers {
-		logger.Error(err, value, args...)
+		logger.Error(err, args...)
 	}
 }
 
-func (logger *Logger) Fatal(err error, value string, args ...any) {
+func (logger *Logger) Fatal(err error, args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
 	for _, logger := range logger.loggers {
-		logger.Fatal(err, value, args...)
+		logger.Fatal(err, args...)
 	}
 	os.Exit(1)
 }

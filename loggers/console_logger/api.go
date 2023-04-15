@@ -13,27 +13,27 @@ const (
 	fatalLevel = "[FATAL] "
 )
 
-func (logger *Logger) Debug(value string, args ...any) {
+func (logger *Logger) Debug(args ...any) {
 	logger.writer.SetPrefix(debugLevel)
-	logger.writer.Println(console_tools.Debug(message_tools.Build(value, args...)))
+	logger.writer.Println(console_tools.Debug(message_tools.Build(args...)))
 }
 
-func (logger *Logger) Info(value string, args ...any) {
+func (logger *Logger) Info(args ...any) {
 	logger.writer.SetPrefix(infoLevel)
-	logger.writer.Println(console_tools.Info(message_tools.Build(value, args...)))
+	logger.writer.Println(console_tools.Info(message_tools.Build(args...)))
 }
 
-func (logger *Logger) Warn(value string, args ...any) {
+func (logger *Logger) Warn(args ...any) {
 	logger.writer.SetPrefix(warnLevel)
-	logger.writer.Println(console_tools.Warn(message_tools.Build(value, args...)))
+	logger.writer.Println(console_tools.Warn(message_tools.Build(args...)))
 }
 
-func (logger *Logger) Error(err error, value string, args ...any) {
+func (logger *Logger) Error(err error, args ...any) {
 	logger.writer.SetPrefix(errorLevel)
-	logger.writer.Println(console_tools.Error(err.Error() + " | " + message_tools.Build(value, args...)))
+	logger.writer.Println(console_tools.Error(err.Error() + message_tools.BuildError(args...)))
 }
 
-func (logger *Logger) Fatal(err error, value string, args ...any) {
+func (logger *Logger) Fatal(err error, args ...any) {
 	logger.writer.SetPrefix(fatalLevel)
-	logger.writer.Println(console_tools.Fatal(err.Error() + " | " + message_tools.Build(value, args...)))
+	logger.writer.Println(console_tools.Fatal(err.Error() + message_tools.BuildError(args...)))
 }
