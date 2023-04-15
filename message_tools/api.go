@@ -27,7 +27,10 @@ func BuildError(err error, args ...any) string {
 
 	var errorMessage string
 	if err != nil {
-		errorMessage = err.Error() + " | "
+		errorMessage = err.Error()
+		if len(stringArgs) > 0 {
+			errorMessage += " | "
+		}
 	}
 
 	return errorMessage + strings.Join(stringArgs, " ")
