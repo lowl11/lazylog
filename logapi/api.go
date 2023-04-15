@@ -8,8 +8,9 @@ import (
 )
 
 type Logger struct {
-	loggers []ILogger
-	mutex   sync.Mutex
+	loggers  []ILogger
+	jsonMode bool
+	mutex    sync.Mutex
 }
 
 func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
@@ -24,6 +25,11 @@ func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
 
 func (logger *Logger) Custom(customLogger ILogger) *Logger {
 	logger.loggers = append(logger.loggers, customLogger)
+	return logger
+}
+
+func (logger *Logger) JSON() *Logger {
+	logger.jsonMode = true
 	return logger
 }
 
