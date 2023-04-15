@@ -1,6 +1,7 @@
 package message_tools
 
 import (
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -22,6 +23,12 @@ func toString(anyValue any) string {
 		return fmt.Sprintf("%f", value.Float())
 	case reflect.Float64:
 		return fmt.Sprintf("%g", value.Float())
+	case reflect.Struct, reflect.Map, reflect.Slice, reflect.Array:
+		valueInBytes, err := json.Marshal(anyValue)
+		if err != nil {
+			return ""
+		}
+		return string(valueInBytes)
 	case reflect.Ptr:
 		return toString(value.Elem().Interface())
 	default:
