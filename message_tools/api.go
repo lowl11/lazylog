@@ -1,11 +1,12 @@
 package message_tools
 
 import (
+	"encoding/json"
 	"strings"
-	"time"
 )
 
 var (
+	JsonMode   bool
 	NoTimeMode bool
 )
 
@@ -18,17 +19,13 @@ func Build(args ...any) string {
 	return strings.Join(stringArgs, " ")
 }
 
-func BuildError(args ...any) string {
-	if len(args) == 0 {
-		return ""
-	}
-
+func BuildError(err error, args ...any) string {
 	stringArgs := make([]string, 0, len(args))
 	for _, arg := range args {
 		stringArgs = append(stringArgs, toString(arg))
 	}
 
-	return " | " + strings.Join(stringArgs, " ")
+	return err.Error() + " | " + strings.Join(stringArgs, " ")
 }
 
 func BuildPrefix(level string) string {
@@ -36,5 +33,36 @@ func BuildPrefix(level string) string {
 		return level
 	}
 
-	return time.Now().Format("02-01-2006 15:04:05") + " " + level
+	return getTime() + " " + level
+}
+
+func Json(level string, args ...any) string {
+	logMessage := &LogMessage{
+		Message: Build(args...),
+		Level:   level,
+		Time:    getTime(),
+	}
+
+	logMessageInBytes, err := json.Marshal(logMessage)
+	if err != nil {
+		return "|ERROR IN BUILDING MESSAGE|"
+	}
+
+	return string(logMessageInBytes)
+}
+
+func JsonError(err error, level string, args ...any) string {
+	logMessage := &LogMessage{
+		Message: Build(args...),
+		Level:   level,
+		Time:    getTime(),
+		Error:   err.Error(),
+	}
+
+	logMessageInBytes, err := json.Marshal(logMessage)
+	if err != nil {
+		return "|ERROR IN BUILDING MESSAGE|"
+	}
+
+	return string(logMessageInBytes)
 }

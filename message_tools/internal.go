@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 func toString(anyValue any) string {
@@ -34,4 +35,12 @@ func toString(anyValue any) string {
 	default:
 		return fmt.Sprintf("%v", value)
 	}
+}
+
+func getTime() string {
+	if NoTimeMode {
+		return ""
+	}
+
+	return time.Now().Format("02-01-2006 15:04:05")
 }

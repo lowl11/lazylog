@@ -11,29 +11,75 @@ const (
 	warnLevel  = "[WARN] "
 	errorLevel = "[ERROR] "
 	fatalLevel = "[FATAL] "
+
+	jsonDebugLevel = "DEBUG"
+	jsonInfoLevel  = "INFO"
+	jsonWarnLevel  = "WARN"
+	jsonErrorLevel = "ERROR"
+	jsonFatalLevel = "FATAL"
 )
 
 func (logger *Logger) Debug(args ...any) {
-	logger.writer.SetPrefix(message_tools.BuildPrefix(debugLevel))
-	logger.writer.Println(console_tools.Debug(message_tools.Build(args...)))
+	var message string
+
+	if !message_tools.JsonMode {
+		logger.writer.SetPrefix(message_tools.BuildPrefix(debugLevel))
+		message = message_tools.Build(args...)
+	} else {
+		message = message_tools.Json(jsonDebugLevel, args...)
+	}
+
+	logger.writer.Println(console_tools.Debug(message))
 }
 
 func (logger *Logger) Info(args ...any) {
-	logger.writer.SetPrefix(message_tools.BuildPrefix(infoLevel))
-	logger.writer.Println(console_tools.Info(message_tools.Build(args...)))
+	var message string
+
+	if !message_tools.JsonMode {
+		logger.writer.SetPrefix(message_tools.BuildPrefix(infoLevel))
+		message = message_tools.Build(args...)
+	} else {
+		message = message_tools.Json(jsonInfoLevel, args...)
+	}
+
+	logger.writer.Println(console_tools.Info(message))
 }
 
 func (logger *Logger) Warn(args ...any) {
-	logger.writer.SetPrefix(message_tools.BuildPrefix(warnLevel))
-	logger.writer.Println(console_tools.Warn(message_tools.Build(args...)))
+	var message string
+
+	if !message_tools.JsonMode {
+		logger.writer.SetPrefix(message_tools.BuildPrefix(warnLevel))
+		message = message_tools.Build(args...)
+	} else {
+		message = message_tools.Json(jsonWarnLevel, args...)
+	}
+
+	logger.writer.Println(console_tools.Warn(message))
 }
 
 func (logger *Logger) Error(err error, args ...any) {
-	logger.writer.SetPrefix(message_tools.BuildPrefix(errorLevel))
-	logger.writer.Println(console_tools.Error(err.Error() + message_tools.BuildError(args...)))
+	var message string
+
+	if !message_tools.JsonMode {
+		logger.writer.SetPrefix(message_tools.BuildPrefix(errorLevel))
+		message = message_tools.BuildError(err, args...)
+	} else {
+		message = message_tools.JsonError(err, jsonErrorLevel, args...)
+	}
+
+	logger.writer.Println(console_tools.Error(message))
 }
 
 func (logger *Logger) Fatal(err error, args ...any) {
-	logger.writer.SetPrefix(message_tools.BuildPrefix(fatalLevel))
-	logger.writer.Println(console_tools.Fatal(err.Error() + message_tools.BuildError(args...)))
+	var message string
+
+	if !message_tools.JsonMode {
+		logger.writer.SetPrefix(message_tools.BuildPrefix(fatalLevel))
+		message = message_tools.BuildError(err, args...)
+	} else {
+		message = message_tools.JsonError(err, jsonFatalLevel, args...)
+	}
+
+	logger.writer.Println(console_tools.Fatal(message))
 }

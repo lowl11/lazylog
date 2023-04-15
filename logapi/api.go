@@ -9,9 +9,8 @@ import (
 )
 
 type Logger struct {
-	loggers  []ILogger
-	jsonMode bool
-	mutex    sync.Mutex
+	loggers []ILogger
+	mutex   sync.Mutex
 }
 
 func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
@@ -30,7 +29,7 @@ func (logger *Logger) Custom(customLogger ILogger) *Logger {
 }
 
 func (logger *Logger) JSON() *Logger {
-	logger.jsonMode = true
+	message_tools.JsonMode = true
 	return logger
 }
 
