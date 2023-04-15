@@ -3,6 +3,7 @@ package logapi
 import (
 	"github.com/lowl11/lazylog/loggers/console_logger"
 	"github.com/lowl11/lazylog/loggers/file_logger"
+	"github.com/lowl11/lazylog/message_tools"
 	"os"
 	"sync"
 )
@@ -30,6 +31,11 @@ func (logger *Logger) Custom(customLogger ILogger) *Logger {
 
 func (logger *Logger) JSON() *Logger {
 	logger.jsonMode = true
+	return logger
+}
+
+func (logger *Logger) NoTime() *Logger {
+	message_tools.NoTimeMode = true
 	return logger
 }
 
