@@ -6,8 +6,9 @@ import (
 )
 
 var (
-	JsonMode   bool
-	NoTimeMode bool
+	JsonMode     bool
+	NoTimeMode   bool
+	NoPrefixMode bool
 )
 
 func Build(args ...any) string {
@@ -37,6 +38,14 @@ func BuildError(err error, args ...any) string {
 }
 
 func BuildPrefix(level string) string {
+	if NoPrefixMode && !NoTimeMode {
+		return getTime() + " "
+	}
+
+	if NoPrefixMode {
+		return ""
+	}
+
 	if NoTimeMode {
 		return level
 	}

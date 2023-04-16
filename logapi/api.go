@@ -38,6 +38,11 @@ func (logger *Logger) NoTime() *Logger {
 	return logger
 }
 
+func (logger *Logger) NoPrefix() *Logger {
+	message_tools.NoPrefixMode = true
+	return logger
+}
+
 func New() *Logger {
 	return &Logger{
 		loggers: []ILogger{
