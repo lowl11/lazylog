@@ -1,6 +1,7 @@
 package logapi
 
 import (
+	"github.com/lowl11/lazylog/line_event"
 	"github.com/lowl11/lazylog/loggers/console_logger"
 	"github.com/lowl11/lazylog/loggers/file_logger"
 	"github.com/lowl11/lazylog/message_tools"
@@ -10,8 +11,14 @@ import (
 )
 
 type Logger struct {
-	loggers []ILogger
-	mutex   sync.Mutex
+	loggers       []ILogger
+	customLoggers []ILogger
+	mutex         sync.Mutex
+	line          *line_event.Event
+
+	exitDuration     time.Duration
+	customDuration   time.Duration
+	isCustomDuration bool
 }
 
 func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
@@ -25,7 +32,21 @@ func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
 }
 
 func (logger *Logger) Custom(customLogger ILogger) *Logger {
-	logger.loggers = append(logger.loggers, customLogger)
+	logger.customLoggers = append(logger.customLoggers, customLogger)
+	if !logger.isCustomDuration {
+		logger.exitDuration = logger.exitDuration + time.Millisecond*defaultExitDuration
+	}
+	return logger
+}
+
+func (logger *Logger) CustomExitDuration(duration time.Duration) *Logger {
+	if duration < defaultExitDuration {
+		return logger
+	}
+
+	logger.isCustomDuration = true
+	logger.customDuration = duration
+
 	return logger
 }
 
@@ -49,7 +70,9 @@ func New() *Logger {
 		loggers: []ILogger{
 			console_logger.Create(),
 		},
-		mutex: sync.Mutex{},
+		mutex:        sync.Mutex{},
+		line:         line_event.New(),
+		exitDuration: time.Millisecond * defaultExitDuration,
 	}
 }
 
@@ -58,7 +81,11 @@ func (logger *Logger) Debug(args ...any) {
 	defer logger.mutex.Unlock()
 
 	for _, loggerItem := range logger.loggers {
-		go loggerItem.Debug(args...)
+		loggerItem.Debug(args...)
+	}
+
+	for _, customLogger := range logger.customLoggers {
+		logger.line.AddInfo(customLogger.Debug, args...)
 	}
 }
 
@@ -67,7 +94,11 @@ func (logger *Logger) Info(args ...any) {
 	defer logger.mutex.Unlock()
 
 	for _, loggerItem := range logger.loggers {
-		go loggerItem.Info(args...)
+		loggerItem.Info(args...)
+	}
+
+	for _, customLogger := range logger.customLoggers {
+		logger.line.AddInfo(customLogger.Info, args...)
 	}
 }
 
@@ -76,7 +107,11 @@ func (logger *Logger) Warn(args ...any) {
 	defer logger.mutex.Unlock()
 
 	for _, loggerItem := range logger.loggers {
-		go loggerItem.Warn(args...)
+		loggerItem.Warn(args...)
+	}
+
+	for _, customLogger := range logger.customLoggers {
+		logger.line.AddInfoCustom(customLogger.Warn, args...)
 	}
 }
 
@@ -85,7 +120,11 @@ func (logger *Logger) Error(err error, args ...any) {
 	defer logger.mutex.Unlock()
 
 	for _, loggerItem := range logger.loggers {
-		go loggerItem.Error(err, args...)
+		loggerItem.Error(err, args...)
+	}
+
+	for _, customLogger := range logger.customLoggers {
+		logger.line.AddErrorCustom(customLogger.Error, err, args...)
 	}
 }
 
@@ -94,9 +133,17 @@ func (logger *Logger) Fatal(err error, args ...any) {
 	defer logger.mutex.Unlock()
 
 	for _, loggerItem := range logger.loggers {
-		go loggerItem.Fatal(err, args...)
+		loggerItem.Fatal(err, args...)
 	}
 
-	time.Sleep(time.Second)
+	for _, customLogger := range logger.customLoggers {
+		logger.line.AddErrorCustom(customLogger.Fatal, err, args...)
+	}
+
+	if logger.isCustomDuration {
+		time.Sleep(logger.customDuration)
+	} else {
+		time.Sleep(logger.exitDuration)
+	}
 	os.Exit(1)
 }
