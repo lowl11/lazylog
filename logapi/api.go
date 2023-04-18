@@ -6,6 +6,7 @@ import (
 	"github.com/lowl11/lazylog/message_tools"
 	"os"
 	"sync"
+	"time"
 )
 
 type Logger struct {
@@ -56,8 +57,8 @@ func (logger *Logger) Debug(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
-	for _, logger := range logger.loggers {
-		logger.Debug(args...)
+	for _, loggerItem := range logger.loggers {
+		go loggerItem.Debug(args...)
 	}
 }
 
@@ -65,8 +66,8 @@ func (logger *Logger) Info(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
-	for _, logger := range logger.loggers {
-		logger.Info(args...)
+	for _, loggerItem := range logger.loggers {
+		go loggerItem.Info(args...)
 	}
 }
 
@@ -74,8 +75,8 @@ func (logger *Logger) Warn(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
-	for _, logger := range logger.loggers {
-		logger.Warn(args...)
+	for _, loggerItem := range logger.loggers {
+		go loggerItem.Warn(args...)
 	}
 }
 
@@ -83,8 +84,8 @@ func (logger *Logger) Error(err error, args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
-	for _, logger := range logger.loggers {
-		logger.Error(err, args...)
+	for _, loggerItem := range logger.loggers {
+		go loggerItem.Error(err, args...)
 	}
 }
 
@@ -92,8 +93,10 @@ func (logger *Logger) Fatal(err error, args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
-	for _, logger := range logger.loggers {
-		logger.Fatal(err, args...)
+	for _, loggerItem := range logger.loggers {
+		go loggerItem.Fatal(err, args...)
 	}
+
+	time.Sleep(time.Second)
 	os.Exit(1)
 }
