@@ -2,6 +2,7 @@ package logapi
 
 import (
 	"github.com/lowl11/lazylog/line_event"
+	"github.com/lowl11/lazylog/logapi/log_levels"
 	"github.com/lowl11/lazylog/loggers/console_logger"
 	"github.com/lowl11/lazylog/loggers/file_logger"
 	"github.com/lowl11/lazylog/message_tools"
@@ -19,6 +20,28 @@ type Logger struct {
 	exitDuration     time.Duration
 	customDuration   time.Duration
 	isCustomDuration bool
+
+	level uint
+}
+
+func New() *Logger {
+	return &Logger{
+		loggers: []ILogger{
+			console_logger.Create(),
+		},
+		mutex:        sync.Mutex{},
+		line:         line_event.New(),
+		exitDuration: time.Millisecond * defaultExitDuration,
+	}
+}
+
+func (logger *Logger) Level(level uint) *Logger {
+	if level > log_levels.FATAL {
+		return logger
+	}
+
+	logger.level = level
+	return logger
 }
 
 func (logger *Logger) File(fileBase string, filePath ...string) *Logger {
@@ -65,20 +88,14 @@ func (logger *Logger) NoPrefix() *Logger {
 	return logger
 }
 
-func New() *Logger {
-	return &Logger{
-		loggers: []ILogger{
-			console_logger.Create(),
-		},
-		mutex:        sync.Mutex{},
-		line:         line_event.New(),
-		exitDuration: time.Millisecond * defaultExitDuration,
-	}
-}
-
 func (logger *Logger) Debug(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
+
+	// skip log by level
+	if log_levels.Check(logger.level, log_levels.DEBUG) {
+		return
+	}
 
 	for _, loggerItem := range logger.loggers {
 		loggerItem.Debug(args...)
@@ -93,6 +110,11 @@ func (logger *Logger) Info(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
+	// skip log by level
+	if log_levels.Check(logger.level, log_levels.INFO) {
+		return
+	}
+
 	for _, loggerItem := range logger.loggers {
 		loggerItem.Info(args...)
 	}
@@ -106,6 +128,11 @@ func (logger *Logger) Warn(args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
+	// skip log by level
+	if log_levels.Check(logger.level, log_levels.WARN) {
+		return
+	}
+
 	for _, loggerItem := range logger.loggers {
 		loggerItem.Warn(args...)
 	}
@@ -118,6 +145,11 @@ func (logger *Logger) Warn(args ...any) {
 func (logger *Logger) Error(err error, args ...any) {
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
+
+	// skip log by level
+	if log_levels.Check(logger.level, log_levels.ERROR) {
+		return
+	}
 
 	for _, loggerItem := range logger.loggers {
 		loggerItem.Error(err, args...)
