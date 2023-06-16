@@ -1,11 +1,11 @@
 package logapi
 
 import (
-	"github.com/lowl11/lazylog/line_event"
+	"github.com/lowl11/lazylog/internal/line_event"
+	"github.com/lowl11/lazylog/internal/loggers/console_logger"
+	"github.com/lowl11/lazylog/internal/loggers/file_logger"
+	"github.com/lowl11/lazylog/internal/message_tools"
 	"github.com/lowl11/lazylog/logapi/log_levels"
-	"github.com/lowl11/lazylog/loggers/console_logger"
-	"github.com/lowl11/lazylog/loggers/file_logger"
-	"github.com/lowl11/lazylog/message_tools"
 	"os"
 	"sync"
 	"time"

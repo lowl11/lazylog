@@ -1,8 +1,7 @@
-package console_logger
+package file_logger
 
 import (
-	"github.com/lowl11/lazylog/console_tools"
-	"github.com/lowl11/lazylog/message_tools"
+	"github.com/lowl11/lazylog/internal/message_tools"
 )
 
 const (
@@ -20,6 +19,7 @@ const (
 )
 
 func (logger *Logger) Debug(args ...any) {
+	logger.updateFile()
 	var message string
 
 	if !message_tools.JsonMode {
@@ -29,10 +29,11 @@ func (logger *Logger) Debug(args ...any) {
 		message = message_tools.Json(jsonDebugLevel, args...)
 	}
 
-	logger.writer.Println(console_tools.Debug(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Info(args ...any) {
+	logger.updateFile()
 	var message string
 
 	if !message_tools.JsonMode {
@@ -42,10 +43,11 @@ func (logger *Logger) Info(args ...any) {
 		message = message_tools.Json(jsonInfoLevel, args...)
 	}
 
-	logger.writer.Println(console_tools.Info(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Warn(args ...any) {
+	logger.updateFile()
 	var message string
 
 	if !message_tools.JsonMode {
@@ -55,10 +57,11 @@ func (logger *Logger) Warn(args ...any) {
 		message = message_tools.Json(jsonWarnLevel, args...)
 	}
 
-	logger.writer.Println(console_tools.Warn(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Error(err error, args ...any) {
+	logger.updateFile()
 	var message string
 
 	if !message_tools.JsonMode {
@@ -68,10 +71,11 @@ func (logger *Logger) Error(err error, args ...any) {
 		message = message_tools.JsonError(err, jsonErrorLevel, args...)
 	}
 
-	logger.writer.Println(console_tools.Error(message))
+	logger.writer.Println(message)
 }
 
 func (logger *Logger) Fatal(err error, args ...any) {
+	logger.updateFile()
 	var message string
 
 	if !message_tools.JsonMode {
@@ -81,5 +85,5 @@ func (logger *Logger) Fatal(err error, args ...any) {
 		message = message_tools.JsonError(err, jsonFatalLevel, args...)
 	}
 
-	logger.writer.Println(console_tools.Fatal(message))
+	logger.writer.Println(message)
 }
