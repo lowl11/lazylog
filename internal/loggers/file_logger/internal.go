@@ -14,7 +14,7 @@ const (
 
 func (logger *Logger) createFile() *os.File {
 	// build log file name
-	fileName := fmt.Sprintf(fileNamePattern, logger.fileBase, time.Now().Format("02-01-2006"))
+	fileName := fmt.Sprintf(fileNamePattern, logger.fileBase, time.Now().Format("2006-01-02"))
 
 	// destination folder
 	if logger.filePath != "" {
@@ -37,7 +37,7 @@ func (logger *Logger) createFile() *os.File {
 }
 
 func (logger *Logger) updateFile() {
-	fileName := fmt.Sprintf(fileNamePattern, logger.fileBase, time.Now().Format("02-01-2006"))
+	fileName := fmt.Sprintf(fileNamePattern, logger.fileBase, time.Now().Format("2006-01-02"))
 
 	if logger.fileName != fileName {
 		logger.writer = log.New(logger.createFile(), "", 0)
