@@ -30,7 +30,6 @@ func New() *Logger {
 			console_logger.Create(),
 		},
 		mutex:        sync.Mutex{},
-		line:         line_event.New(),
 		exitDuration: time.Millisecond * defaultExitDuration,
 	}
 }
@@ -58,6 +57,10 @@ func (logger *Logger) Custom(customLogger ILogger) *Logger {
 	logger.customLoggers = append(logger.customLoggers, customLogger)
 	if !logger.isCustomDuration {
 		logger.exitDuration = logger.exitDuration + time.Millisecond*defaultExitDuration
+	}
+
+	if logger.line == nil && len(logger.customLoggers) > 0 {
+		logger.line = line_event.New()
 	}
 	return logger
 }
