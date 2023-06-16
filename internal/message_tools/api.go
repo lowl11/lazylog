@@ -12,34 +12,38 @@ var (
 )
 
 func Build(args ...any) string {
-	stringArgs := make([]string, 0, len(args))
+	stringArgs := strings.Builder{}
 	for _, arg := range args {
-		stringArgs = append(stringArgs, toString(arg))
+		stringArgs.WriteString(toString(arg))
+		stringArgs.WriteString(" ")
 	}
-
-	return strings.Join(stringArgs, " ")
+	return stringArgs.String()[:stringArgs.Len()-1]
 }
 
 func BuildError(err error, args ...any) string {
-	stringArgs := make([]string, 0, len(args))
+	stringArgs := strings.Builder{}
 	for _, arg := range args {
-		stringArgs = append(stringArgs, toString(arg))
+		stringArgs.WriteString(toString(arg))
+		stringArgs.WriteString(" ")
 	}
 
 	var errorMessage string
 	if err != nil {
 		errorMessage = err.Error()
-		if len(stringArgs) > 0 {
+		if stringArgs.Len() > 0 {
 			errorMessage += " | "
 		}
 	}
 
-	return errorMessage + strings.Join(stringArgs, " ")
+	return errorMessage + stringArgs.String()[:stringArgs.Len()-1]
 }
 
 func BuildPrefix(level string) string {
+	prefix := strings.Builder{}
 	if NoPrefixMode && !NoTimeMode {
-		return getTime() + " "
+		prefix.WriteString(getTime())
+		prefix.WriteString(" ")
+		return prefix.String()
 	}
 
 	if NoPrefixMode {
@@ -50,7 +54,10 @@ func BuildPrefix(level string) string {
 		return level
 	}
 
-	return getTime() + " " + level
+	prefix.WriteString(getTime())
+	prefix.WriteString(" ")
+	prefix.WriteString(level)
+	return prefix.String()
 }
 
 func Json(level string, args ...any) string {
