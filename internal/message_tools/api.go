@@ -12,6 +12,10 @@ var (
 )
 
 func Build(args ...any) string {
+	if len(args) == 0 {
+		return ""
+	}
+
 	stringArgs := strings.Builder{}
 	for _, arg := range args {
 		stringArgs.WriteString(toString(arg))
@@ -33,6 +37,10 @@ func BuildError(err error, args ...any) string {
 		if stringArgs.Len() > 0 {
 			errorMessage += " | "
 		}
+	}
+
+	if len(args) == 0 {
+		return errorMessage
 	}
 
 	return errorMessage + stringArgs.String()[:stringArgs.Len()-1]
