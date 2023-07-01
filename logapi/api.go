@@ -92,6 +92,10 @@ func (logger *Logger) NoPrefix() *Logger {
 }
 
 func (logger *Logger) Debug(args ...any) {
+	if len(args) == 0 {
+		return
+	}
+
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
@@ -110,6 +114,10 @@ func (logger *Logger) Debug(args ...any) {
 }
 
 func (logger *Logger) Info(args ...any) {
+	if len(args) == 0 {
+		return
+	}
+
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
@@ -128,6 +136,10 @@ func (logger *Logger) Info(args ...any) {
 }
 
 func (logger *Logger) Warn(args ...any) {
+	if len(args) == 0 {
+		return
+	}
+
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
@@ -146,6 +158,10 @@ func (logger *Logger) Warn(args ...any) {
 }
 
 func (logger *Logger) Error(err error, args ...any) {
+	if len(args) == 0 {
+		return
+	}
+
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
@@ -164,6 +180,10 @@ func (logger *Logger) Error(err error, args ...any) {
 }
 
 func (logger *Logger) Fatal(err error, args ...any) {
+	if len(args) == 0 {
+		return
+	}
+
 	logger.mutex.Lock()
 	defer logger.mutex.Unlock()
 
