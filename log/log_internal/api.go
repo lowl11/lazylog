@@ -26,6 +26,10 @@ func Init(config LogConfig) {
 	_init()
 }
 
+func Initialized() bool {
+	return _logger != nil
+}
+
 func Debug(args ...any) {
 	if _logger == nil {
 		_init()
